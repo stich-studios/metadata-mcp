@@ -1,14 +1,16 @@
 {
   "mcpServers": {
-    "video-metadata": {
+    "video": {
       "command": "node",
-      "args": ["/path/to/metadata-mcp/build/index.js"],
+      "args": ["C:\\Shashwat\\Programming\\metadata-mcp\\build\\index.js"],
       "env": {
-        "POSTGRES_USER": "postgres",
-        "POSTGRES_PASSWORD": "password",
-        "POSTGRES_HOST": "localhost",
-        "POSTGRES_PORT": "5432",
-        "POSTGRES_DB": "video_metadata"
+        "DB_HOST": "localhost",
+        "DB_PORT": "5432",
+        "DB_NAME": "video_metadata",
+        "DB_USER": "postgres",
+        "DB_PASSWORD": "2206",
+        "DB_CLIENT": "pg",
+        "MCP_MODE": "stdio"
       }
     }
   }
