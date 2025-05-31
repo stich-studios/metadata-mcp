@@ -6,25 +6,25 @@
   "scripts": {
     "build": "tsc",
     "start": "node build/index.js",
-    "dev": "tsc && node build/index.js",
-    "setup": "tsc && node build/setup.js",
-    "examples": "tsc && node build/examples.js",
-    "db:up": "docker-compose up -d postgres",
-    "db:down": "docker-compose down",
-    "db:reset": "docker-compose down -v && docker-compose up -d postgres",
-    "pgadmin": "docker-compose up -d pgadmin",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --watch src --ext ts --exec \"npm run build && node build/index.js\"",
+    "dev:build": "tsc --watch",
+    "dev:serve": "nodemon build/index.js",
+    "clean": "rm -rf build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^5.0.2",
     "@types/node": "^22.15.29",
+    "nodemon": "^3.1.10",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
     "@types/pg": "^8.15.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "knex": "^3.1.0",
     "pg": "^8.16.0",
     "zod": "^3.25.42"

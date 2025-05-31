@@ -1,5 +1,5 @@
 import { assert } from "console";
-
+import dotenv from "dotenv";
 export interface EnvConfig {
   dbHost: string;
   dbPort: string;
@@ -8,6 +8,8 @@ export interface EnvConfig {
   dbPassword: string;
   dbClient: string;
 }
+
+dotenv.config();
 
 const config: EnvConfig = {
   dbHost: process.env.DB_HOST || "localhost",
