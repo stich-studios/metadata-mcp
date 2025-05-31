@@ -165,10 +165,71 @@ class Server {
             term: zod_1.default
                 .string()
                 .describe("Search term to filter videos, e.g 'barcelona'."),
-            filters: SearchFiltersSchema,
-            query: SearchQuerySchema,
-        }, async ({ term, filters, query }) => {
-            const validatedFilters = SearchFiltersSchema.parse(filters);
+            gameType: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by game type, e.g. 'football', 'basketball'."),
+            teams: zod_1.default
+                .union([zod_1.default.string(), zod_1.default.array(zod_1.default.string())])
+                .optional()
+                .describe("Filter by team name(s) e.g. 'Celtics', ['Celtics', 'Knicks']."),
+            league: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by league name, e.g. 'NBA', 'Premier League'."),
+            season: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by season, e.g. '2021', '2022'."),
+            winner: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by winner team name, e.g. 'Arsenal'."),
+            venue: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by venue name, e.g. 'Wembley Stadium'."),
+            tags: zod_1.default
+                .record(zod_1.default.any())
+                .optional()
+                .describe("Filter by tags., e.g. { 'highlight': true, 'full_match': false }."),
+            matchDateStart: zod_1.default
+                .string()
+                .datetime()
+                .optional()
+                .describe("Filter by match start date, e.g. '2022-01-01T00:00:00Z'."),
+            matchDateEnd: zod_1.default
+                .string()
+                .datetime()
+                .optional()
+                .describe("Filter by match end date, e.g. '2022-12-31T23:59:59Z'."),
+            limit: zod_1.default
+                .number()
+                .int()
+                .positive()
+                .optional()
+                .describe("Maximum number of results to return."),
+            offset: zod_1.default
+                .number()
+                .int()
+                .min(0)
+                .optional()
+                .describe("Number of results to skip before starting to return results."),
+            orderBy: zod_1.default
+                .string()
+                .optional()
+                .describe("Field to order results by, e.g. 'matchDate', 'title'."),
+            orderDirection: zod_1.default
+                .enum(["asc", "desc"])
+                .optional()
+                .describe("Direction to order results, either 'asc' for ascending or 'desc' for descending."),
+            select: zod_1.default
+                .array(zod_1.default.string())
+                .optional()
+                .describe("Fields to select in the results, e.g. ['title', 'gameType', 'teams']."),
+        }, async (request) => {
+            console.log("Search term:", request.term);
+            const validatedFilters = SearchFiltersSchema.parse(request);
             const filter = {
                 ...validatedFilters,
                 dateRange: {
@@ -180,11 +241,11 @@ class Server {
                         : undefined,
                 },
             };
-            const validatedQuery = SearchQuerySchema.parse(query || {});
+            const validatedQuery = SearchQuerySchema.parse(request);
             const queryOpts = {
                 ...validatedQuery,
             };
-            const result = await VideoMetadataDao_1.videoMetadataDao.searchVideoMetadata(this._db, term, filter, queryOpts);
+            const result = await VideoMetadataDao_1.videoMetadataDao.searchVideoMetadata(this._db, request.term, filter, queryOpts);
             return {
                 content: [
                     {
@@ -195,10 +256,70 @@ class Server {
             };
         });
         this._server.tool("get_video_metadata_by_filters", "Retrieves video metadata based on the provided filters.", {
-            filters: SearchFiltersSchema,
-            query: SearchQuerySchema,
-        }, async ({ filters, query }) => {
-            const validatedFilters = SearchFiltersSchema.parse(filters);
+            gameType: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by game type, e.g. 'football', 'basketball'."),
+            teams: zod_1.default
+                .union([zod_1.default.string(), zod_1.default.array(zod_1.default.string())])
+                .optional()
+                .describe("Filter by team name(s) e.g. 'Celtics', ['Celtics', 'Knicks']."),
+            league: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by league name, e.g. 'NBA', 'Premier League'."),
+            season: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by season, e.g. '2021', '2022'."),
+            winner: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by winner team name, e.g. 'Arsenal'."),
+            venue: zod_1.default
+                .string()
+                .optional()
+                .describe("Filter by venue name, e.g. 'Wembley Stadium'."),
+            tags: zod_1.default
+                .record(zod_1.default.any())
+                .optional()
+                .describe("Filter by tags., e.g. { 'highlight': true, 'full_match': false }."),
+            matchDateStart: zod_1.default
+                .string()
+                .datetime()
+                .optional()
+                .describe("Filter by match start date, e.g. '2022-01-01T00:00:00Z'."),
+            matchDateEnd: zod_1.default
+                .string()
+                .datetime()
+                .optional()
+                .describe("Filter by match end date, e.g. '2022-12-31T23:59:59Z'."),
+            limit: zod_1.default
+                .number()
+                .int()
+                .positive()
+                .optional()
+                .describe("Maximum number of results to return."),
+            offset: zod_1.default
+                .number()
+                .int()
+                .min(0)
+                .optional()
+                .describe("Number of results to skip before starting to return results."),
+            orderBy: zod_1.default
+                .string()
+                .optional()
+                .describe("Field to order results by, e.g. 'matchDate', 'title'."),
+            orderDirection: zod_1.default
+                .enum(["asc", "desc"])
+                .optional()
+                .describe("Direction to order results, either 'asc' for ascending or 'desc' for descending."),
+            select: zod_1.default
+                .array(zod_1.default.string())
+                .optional()
+                .describe("Fields to select in the results, e.g. ['title', 'gameType', 'teams']."),
+        }, async (request) => {
+            const validatedFilters = SearchFiltersSchema.parse(request);
             const filter = {
                 ...validatedFilters,
                 dateRange: {
@@ -210,7 +331,7 @@ class Server {
                         : undefined,
                 },
             };
-            const validatedQuery = SearchQuerySchema.parse(query || {});
+            const validatedQuery = SearchQuerySchema.parse(request);
             const queryOpts = {
                 ...validatedQuery,
             };
