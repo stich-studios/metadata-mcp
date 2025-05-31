@@ -201,78 +201,8 @@ export class Server {
         term: z
           .string()
           .describe("Search term to filter videos, e.g 'barcelona'."),
-        gameType: z
-          .string()
-          .optional()
-          .describe("Filter by game type, e.g. 'football', 'basketball'."),
-        teams: z
-          .union([z.string(), z.array(z.string())])
-          .optional()
-          .describe(
-            "Filter by team name(s) e.g. 'Celtics', ['Celtics', 'Knicks']."
-          ),
-        league: z
-          .string()
-          .optional()
-          .describe("Filter by league name, e.g. 'NBA', 'Premier League'."),
-        season: z
-          .string()
-          .optional()
-          .describe("Filter by season, e.g. '2021', '2022'."),
-        winner: z
-          .string()
-          .optional()
-          .describe("Filter by winner team name, e.g. 'Arsenal'."),
-        venue: z
-          .string()
-          .optional()
-          .describe("Filter by venue name, e.g. 'Wembley Stadium'."),
-        tags: z
-          .record(z.any())
-          .optional()
-          .describe(
-            "Filter by tags., e.g. { 'highlight': true, 'full_match': false }."
-          ),
-        matchDateStart: z
-          .string()
-          .datetime()
-          .optional()
-          .describe("Filter by match start date, e.g. '2022-01-01T00:00:00Z'."),
-        matchDateEnd: z
-          .string()
-          .datetime()
-          .optional()
-          .describe("Filter by match end date, e.g. '2022-12-31T23:59:59Z'."),
-        limit: z
-          .number()
-          .int()
-          .positive()
-          .optional()
-          .describe("Maximum number of results to return."),
-        offset: z
-          .number()
-          .int()
-          .min(0)
-          .optional()
-          .describe(
-            "Number of results to skip before starting to return results."
-          ),
-        orderBy: z
-          .string()
-          .optional()
-          .describe("Field to order results by, e.g. 'matchDate', 'title'."),
-        orderDirection: z
-          .enum(["asc", "desc"])
-          .optional()
-          .describe(
-            "Direction to order results, either 'asc' for ascending or 'desc' for descending."
-          ),
-        select: z
-          .array(z.string())
-          .optional()
-          .describe(
-            "Fields to select in the results, e.g. ['title', 'gameType', 'teams']."
-          ),
+        ...SearchFiltersSchema.shape,
+        ...SearchQuerySchema.shape,
       },
       async (request) => {
         console.log("Search term:", request.term);
@@ -315,78 +245,8 @@ export class Server {
       "get_video_metadata_by_filters",
       "Retrieves video metadata based on the provided filters.",
       {
-        gameType: z
-          .string()
-          .optional()
-          .describe("Filter by game type, e.g. 'football', 'basketball'."),
-        teams: z
-          .union([z.string(), z.array(z.string())])
-          .optional()
-          .describe(
-            "Filter by team name(s) e.g. 'Celtics', ['Celtics', 'Knicks']."
-          ),
-        league: z
-          .string()
-          .optional()
-          .describe("Filter by league name, e.g. 'NBA', 'Premier League'."),
-        season: z
-          .string()
-          .optional()
-          .describe("Filter by season, e.g. '2021', '2022'."),
-        winner: z
-          .string()
-          .optional()
-          .describe("Filter by winner team name, e.g. 'Arsenal'."),
-        venue: z
-          .string()
-          .optional()
-          .describe("Filter by venue name, e.g. 'Wembley Stadium'."),
-        tags: z
-          .record(z.any())
-          .optional()
-          .describe(
-            "Filter by tags., e.g. { 'highlight': true, 'full_match': false }."
-          ),
-        matchDateStart: z
-          .string()
-          .datetime()
-          .optional()
-          .describe("Filter by match start date, e.g. '2022-01-01T00:00:00Z'."),
-        matchDateEnd: z
-          .string()
-          .datetime()
-          .optional()
-          .describe("Filter by match end date, e.g. '2022-12-31T23:59:59Z'."),
-        limit: z
-          .number()
-          .int()
-          .positive()
-          .optional()
-          .describe("Maximum number of results to return."),
-        offset: z
-          .number()
-          .int()
-          .min(0)
-          .optional()
-          .describe(
-            "Number of results to skip before starting to return results."
-          ),
-        orderBy: z
-          .string()
-          .optional()
-          .describe("Field to order results by, e.g. 'matchDate', 'title'."),
-        orderDirection: z
-          .enum(["asc", "desc"])
-          .optional()
-          .describe(
-            "Direction to order results, either 'asc' for ascending or 'desc' for descending."
-          ),
-        select: z
-          .array(z.string())
-          .optional()
-          .describe(
-            "Fields to select in the results, e.g. ['title', 'gameType', 'teams']."
-          ),
+        ...SearchFiltersSchema.shape,
+        ...SearchQuerySchema.shape,
       },
       async (request) => {
         const validatedFilters = SearchFiltersSchema.parse(request);
