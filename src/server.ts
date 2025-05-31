@@ -205,6 +205,9 @@ export class Server {
         query: SearchQuerySchema,
       },
       async ({ term, filters, query }) => {
+        console.log("Search term:", term);
+        console.log("Search filters:", filters);
+        console.log("Search query options:", query);
         const validatedFilters = SearchFiltersSchema.parse(filters);
         const filter: VideoMetadataFilters = {
           ...validatedFilters,
@@ -248,6 +251,8 @@ export class Server {
         query: SearchQuerySchema,
       },
       async ({ filters, query }) => {
+        console.log("Search filters:", filters);
+        console.log("Search query options:", query);
         const validatedFilters = SearchFiltersSchema.parse(filters);
         const filter: VideoMetadataFilters = {
           ...validatedFilters,
