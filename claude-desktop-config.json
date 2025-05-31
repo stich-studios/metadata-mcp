@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "video-metadata": {
+      "command": "node",
+      "args": ["/path/to/metadata-mcp/build/index.js"],
+      "env": {
+        "POSTGRES_USER": "postgres",
+        "POSTGRES_PASSWORD": "password",
+        "POSTGRES_HOST": "localhost",
+        "POSTGRES_PORT": "5432",
+        "POSTGRES_DB": "video_metadata"
+      }
+    }
+  }
+}
